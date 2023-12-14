@@ -16,6 +16,34 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator 
+{
+  constructor()
+  {
+    this.finalAnswer=0;
+  }
+  add(value)
+  {
+    this.finalAnswer+=parseInt(value);
+  }
+  subtract(value)
+  {
+    this.finalAnswer-=parseInt(value);
+  }
+  multiply(value)
+  {
+    this.finalAnswer*=parseInt(value);
+  }
+  divide(value)
+  {
+    this.finalAnswer/=parseInt(value);
+  }
+  clear()
+  {
+    this.finalAnswer=0;
+  }
+
+
+}
 
 module.exports = Calculator;
