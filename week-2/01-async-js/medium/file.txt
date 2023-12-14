@@ -1,0 +1,2 @@
+hello this is sample file text 1 and i am writing It to test the program 
+this is template file where I have to replace extra spaces;
