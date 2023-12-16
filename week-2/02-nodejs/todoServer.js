@@ -39,11 +39,63 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require("express");
+const { v4: uuidv4 } = require("uuid");
+const bodyParser = require("body-parser");
+
+const app = express();
+
+app.use(bodyParser.json());
+
+const db = new Map();
+
+app.get("/ping", (req, resp) => {
+  return resp.status(200).send("pong");
+});
+
+app.get("/todos", (req, resp) => {
+  return resp.status(200).json(Array.from(db.values()));
+});
+
+app.get("/todos/:id", (req, resp) => {
+  const id = req.params.id;
+  if (!db.has(id)) {
+    return resp.status(404).send("Not Found");
+  } else {
+    const data = db.get(id);
+    return resp.status(200).json({
+      id: id,
+      tile: data.tile,
+      description: data.description,
+    });
+  }
+});
+
+app.post("/todos", (req, resp) => {
+  const todo = req.body;
+  const id = uuidv4();
+  db.set(id, todo);
+  return resp.status(201).json({ id: id });
+});
+
+app.delete("/todos/:id", (req, resp) => {
+  const id = req.params.id;
+  if (!db.has(id)) {
+    return resp.status(404).send("Not Found");
+  } else {
+    db.delete(id);
+    return resp.status(200).send("Deleted");
+  }
+});
+
+app.put("/todos/:id", (req, resp) => {
+  const id = req.params.id;
+  const todo = req.body;
+  if (!db.has(id)) {
+    return resp.status(404).send("Not Found");
+  } else {
+    db.set(id, todo);
+    return resp.status(200).send("Updated");
+  }
+});
+module.exports = app;
